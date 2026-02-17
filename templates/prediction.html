@@ -1,0 +1,256 @@
+<!-- 
+ <!DOCTYPE html>
+<html>
+<head>
+    <title>Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f4f8;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: #ffffff;
+            width: 520px;
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        h2 {
+            color: #222;
+            margin-bottom: 25px;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 22px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result-box {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .result-box h3 {
+            color: #28a745;
+            margin-bottom: 5px;
+        }
+
+        .result-box h4 {
+            color: #444;
+            margin-bottom: 15px;
+        }
+
+        .result-box img {
+            max-width: 100%;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            padding: 5px;
+            background: #fafafa;
+        }
+
+        .logout-link {
+            display: inline-block;
+            margin-top: 25px;
+            color: #007bff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .logout-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Upload Retina Image</h2>
+
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="image" required>
+            <button type="submit">Predict</button>
+        </form>
+
+        {% if result %}
+        <div class="result-box">
+            <h3>Result: {{ result }}</h3>
+            <h4>Confidence: {{ confidence }}%</h4>
+            <img src="{{ url_for('static', filename='uploads/' + image) }}">
+        </div>
+        {% endif %}
+
+        <a href="/logout" class="logout-link">Logout</a>
+    </div>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prediction - DR Detection</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #e0f0ff, #f8fafc);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .prediction-container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 520px;
+            border-radius: 16px;
+            padding: 40px 35px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        /* Decorative circle in background */
+        .prediction-container::before {
+            content: "";
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: #007bff33;
+            border-radius: 50%;
+            top: -60px;
+            right: -60px;
+        }
+
+        h2 {
+            color: #0f172a;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        input[type="file"]:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0,123,255,0.25);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .result-box {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .result-box h3 {
+            color: #28a745;
+            margin-bottom: 5px;
+        }
+
+        .result-box h4 {
+            color: #444;
+            margin-bottom: 15px;
+        }
+
+        .result-box img {
+            max-width: 100%;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            padding: 5px;
+            background: #fafafa;
+        }
+
+        .logout-link {
+            display: inline-block;
+            margin-top: 25px;
+            color: #007bff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .logout-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 540px) {
+            .prediction-container {
+                padding: 35px 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="prediction-container">
+        <h2>Upload Retina Image</h2>
+
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="image" required>
+            <button type="submit">Predict</button>
+        </form>
+
+        {% if result %}
+        <div class="result-box">
+            <h3>Result: {{ result }}</h3>
+            <h4>Confidence: {{ confidence }}%</h4>
+            <img src="{{ url_for('static', filename='uploads/' + image) }}">
+        </div>
+        {% endif %}
+
+        <a href="/logout" class="logout-link">Logout</a>
+    </div>
+</body>
+</html>
